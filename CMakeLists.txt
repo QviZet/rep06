@@ -9,9 +9,8 @@ add_subdirectory(solver_lib)
 add_subdirectory(hello_world_application)
 add_subdirectory(solver_application)
 
-
-set(CPACK_GENERATOR TGZ ZIP RPM DEB MSI DMG WIX DragNDrop)
 set(CPACK_PACKAGE_NAME "solver")
 set(CPACK_PACKAGE_VERSION "0.0.1")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "QviZet")
+set(CPACK_GENERATOR TGZ ZIP RPM DEB MSI DMG WIX DragNDrop)
 include(CPack)
