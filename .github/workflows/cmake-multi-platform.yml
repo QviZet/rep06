@@ -9,17 +9,27 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-
     strategy:
-      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        build_type: [Release]
         include:
-          - os: windows-latest
-            cpp_compiler: cl
           - os: ubuntu-latest
-            cpp_compiler: g++
+            cpack_flag: DEB
+            extension: deb
+          - os: ubuntu-latest
+            cpack_flag: RPM
+            extension: rpm
+          - os: ubuntu-latest
+            cpack_flag: ZIP
+            extension: zip
+          - os: ubuntu-latest
+            cpack_flag: TGZ
+            extension: tar.gz
+          - os: windows-latest
+            cpack_flag: WIX
+            extension: msi
+          - os: macos-latest
+            cpack_flag: DragNDrop
+            extension: dmg
 
 
     steps:
