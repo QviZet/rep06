@@ -7,17 +7,19 @@ on:
     branches: [ "master" ]
 
 jobs:
+    
   build:
     runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
         include:
           - os: ubuntu-latest
-            cpack_flag: RPM
-            extension: rpm
-          - os: ubuntu-latest
             cpack_flag: DEB
             extension: deb
+          - os: ubuntu-latest
+            cpack_flag: RPM
+            extension: rpm
           - os: ubuntu-latest
             cpack_flag: ZIP
             extension: zip
@@ -30,40 +32,30 @@ jobs:
           - os: macos-latest
             cpack_flag: DragNDrop
             extension: dmg
-
-
+    
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Set reusable strings
-      id: strings
-      shell: bash
-      run: |
-        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+      - name: Install dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt install rpm
 
-    - name: Configure CMake
-      run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -S ${{ github.workspace }}
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
 
-    - name: Build
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+      - name: Build
+        run: cmake --build build --config Release
 
-    - name: Install dependencies
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        sudo apt install rpm
+      - name: Create packages
+        run: cd build && cpack -G ${{ matrix.cpack_flag }}
 
-    - name: Create packages
-      run: cd build && cpack -G ${{ matrix.cpack_flag }}
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: pack-${{ matrix.extension }}
-        path: build/*.${{ matrix.extension }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pack-${{ matrix.extension }}
+          path: build/*.${{ matrix.extension }}
 
   create_release:
     needs: build
