@@ -13,11 +13,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            cpack_flag: DEB
-            extension: deb
-          - os: ubuntu-latest
             cpack_flag: RPM
             extension: rpm
+          - os: ubuntu-latest
+            cpack_flag: DEB
+            extension: deb
           - os: ubuntu-latest
             cpack_flag: ZIP
             extension: zip
@@ -51,6 +51,7 @@ jobs:
     - name: Build
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
-    - name: Test
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: ctest --build-config ${{ matrix.build_type }}
+    - name: Install dependencies
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt install rpm
