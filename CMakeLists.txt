@@ -11,6 +11,6 @@ add_subdirectory(solver_application)
 
 set(CPACK_PACKAGE_NAME "solver")
 set(CPACK_PACKAGE_VERSION "0.0.1")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Beedy1122")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "QviZet")
 set(CPACK_GENERATOR ZIP DEB TAG MSI DMG RPM WIX DragNDrop)
 include(CPack)
