@@ -10,6 +10,6 @@ add_subdirectory(hello_world_application)
 add_subdirectory(solver_application)
 
 include(CPack)
-set(CPACK_GENERATOR "TGZ ZIP RPM DEB MSI DMG")
+set(CPACK_GENERATOR TGZ ZIP RPM DEB MSI DMG WIX DragNDrop)
 set(CPACK_PACKAGE_NAME "solver")
 set(CPACK_PACKAGE_VERSION "1.0")
